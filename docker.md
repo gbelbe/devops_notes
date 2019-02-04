@@ -92,23 +92,31 @@ docker container run --name couchdb1 -d -p 80:5984 couchdb:2.1
     bind mount = specifié un mount sur le filesystem du host a un endroit spécifique (non géré par docker en automatique)
     tmpfs = en memoire
 
-Si une image déclare un volume, les données sauvées par le container y seront stockées.
-
-Lister les volumes créés:
-$ docker volume ls
-
-ex: on arrête un container puis on supprime le volume créé par le container:
-docker container stop couchdb1
-docker container rm -v couchdb1
-(ou docker volume rm <volume_id>)
-
-on vérifie:
+pour supprimer les volumes: docker volume rm volume_hash
 docker volume ls
+docker volume prune (vire tous les volumes usagés)
 
-docker container run --name couchdb1 -d -p 80:5980 -v couchdb_vol:/opt/couchdb/data couchdb:2.1
-on créer le container nommé couchdb1, en mode détaché, mappé sur le port 80 au port applicatif 5980, avec le colume nommé couchdb_vol mappé sur le host aux chemin /opt..., le tout a partir de l'image docker couchdb:2.1
 
-Pour lancer un container avec un volume en memoire (tmpfs)
+##Immutable infrastructure:
 
-docker container run -ti --tmpfs /test busybox /bin/sh
-(lance tout ça a partir d'une image busybox et lance le shell immediatement en mode tty interactif)
+Images constituées en couches, avec notion d'héritage:
+
+Les immages sont en lectures seules / au file system du container qui est en lecture écriture
+Un fichié est modifié par recopie dans le layer du conteneur ("copy on write" strategy)
+  
+Immutability: 
+
+- copy on write. On récupère de l'éxtérieur un objet que l'on veut modifier. Au lieu de le modifier directement, ce qui pourrait avoir un impact sur les autres utilisateurs potentiels, on en crée une copie avant de modifier la copie. (celà isole notre objet des autres utilisateurs)
+- copy on read: si l'on utilise une ressource externe (ex: une API) et que l'on n'a pas confiance que le code ou l'implementation peut changer. On la copie pour l'utiliser en locale (copy on read). De cette manière même si l'API originale change, notre copie de lecture restera immutable.
+  
+
+
+Un fichié est supprimé par un marqueur "suppression" dans le layer du conteneur
+Ex: install debian + emacs + apache: les couches sont le résultats des commandes apt-get
+    la couche du dessus n'est pas modifiée. 
+
+Ex: si l'on repart a partir d'une image ubuntu pour créer une image docker ==> recrée une image ajoutant juste les données nécessaires à la nouvelle couche.
+Perf: mapping des fichiers de l'image stockée sur le disque vers la mémoire vive n'est fait qu'une fois par image ==> un binaire partagé pour plusieurs containers (s'ils partagent la même image)
+
+
+
