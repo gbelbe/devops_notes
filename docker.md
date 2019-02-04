@@ -93,8 +93,13 @@ docker container run --name couchdb1 -d -p 80:5984 couchdb:2.1
     tmpfs = en memoire
 
 pour supprimer les volumes: docker volume rm volume_hash
-docker volume ls
 docker volume prune (vire tous les volumes usagés)
+
+docker volume create couchdb_vol
+docker volume ls
+docker container run -it -p 80:4398 -v couchdb_vol:/opt/couchdb/data couchdb_image:latest
+    run a container interactive mode binded on port 80 of the machine and to a specific volume path, from image named couchdb_latest
+
 
 
 ##Immutable infrastructure:
