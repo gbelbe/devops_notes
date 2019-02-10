@@ -1,0 +1,166 @@
+Juju / Charms : canonical k8s distrib
+
+https://docs.google.com/presentation/d/1sO3jefuvFZTeSbOa_QWlOxylyLwo8FF2re7XBek406I/edit?usp=sharing
+
+Upstream k8s from google
+
+charms: tarball of Python (install et config k8s binaires)
+
+charm store: jujucharms.com
+
+charms distribution of kubernetes cdk
+
+Maas.io (bare metal deployment)
+
+k8s.io
+
+Service catalog on kubernetes so that it can integreate with outside services
+
+
+juju gui.
+
+cdk deployment
+
+ubuntu multipass: pour créer un ubuntu sur mac ou windows.
+
+microk8s.io (test kubernetes on its own machine or for dev)
+
+cubecfg = configure local cubectl to external cluster
+
+
+easyrsa
+etcd -> servers de configs a backuper pour kubernetes
+flannel
+istio => multiple kubernetes jointed (service mesh)
+
+nexus and artifactory --> registry Docker
+
+
+K8s: Pas encore vraiment hard multi tenant, le mieux c'est de faire plusieurs petits K8s séparés.
+
+Juju orchestrator, (HA high availability: 2 controllers)
+
+K8S Node = Worker = VM ready to handle k8s pods. (with specific software to manage pods)
+
+Ingress : load balancer to expose http routes from outside of the service within the cluster
+
+
+Juju as a service
+https://blog.jujugui.org/2017/03/01/introducing-jaas-juju-as-a-service/
+
+
+
+
+=====================================
+
+
+Container Application workshop IBM
+https://ibm.gitlab.io/workshop/cloud/
+
+
+
+
+
+
+
+Kubecon May: in barcelona
+
+discourse.jujucharms.com
+#cdk8s on freenode irc
+
+
+https://get-cluster.mybluemix.net/
+key: ibmcloudroadshow
+
+Shared API across Cloud Compute
+
+
+
+Kubernetes concepts:
+
+Kube exectution
+  pods
+  deployment
+  replica set
+  daemon set
+
+Kube security
+  secrets
+  namespaces
+  service accounts
+
+Kube Discovery
+    Labels / Selectors
+    service
+
+Kube Connectivity
+    NodePort
+    Load balancer
+    Ingress controllers
+
+
+1) pods nodes deployments
+
+    Inside a pod (smallest unit inside k8s) : a pod contains one or more containers.
+    Pods runs on top of a node. (usually agregate different pods)
+
+    Deployments:"ex: rules that: makes sure that a specific pod gets deployed on at least two nodes.""
+    Deployment provides update rollback features.
+    Deployment always makes sure it is up and running.
+
+    Nodes don't matter/ it's only
+    Replica set: makes sure that it gets restarted. (you can define a replica set with )
+
+
+DNS (service names)
+Basic layers between pods, don't talk to each others, they discuss through Services: (the DNS brick)
+
+NameSpaces (can create walls between stacks)
+  ex you can talk to this pod, only if it is inside namespace / my application
+
+On peut créer un namespace avec le meme environnement pour isoler l'environnement de chaque dev, ou pour la CI.
+
+
+Nodeport:
+only to test.
+to map a node on a specific port of an IP of your machine, juset like exposing a container to an external NodePort
+
+
+Load Balancer:
+Bind an external IP address to a service.
+
+Ingress:
+way to wire together an application stack.
+define ports and paths between different services
+
+Kube Security Basics:
+  secrets: stored in cluster
+  Exposed to caontainers via env vars or fs.
+
+  Service Accounts: By default applications act as the IAM user.
+
+  Role /Role Assignement
+    Allow access to kub APICan restrict
+
+
+Readiness probe:
+  when liveness fail pod is restarted
+  useful in detecting aberrant behavior
+
+ReadinessProbe:
+
+1) look if pods are deployed
+2) look if pods are ready
+
+Readyness: one pod need another pod to be ready.
+
+
+
+Helm: "package manager" templating for kube yalm (be careful using it, it can get complex)
+Istio: "service mesh metrics and observability inside the cluster"
+Knative - serverless use cases simpler.
+
+knative : on top of kubernetes and istio +  faas + budget
+(mostly for go language and mainly beta)
+
+Don't run database inside kubernetes/

@@ -99,8 +99,18 @@ docker volume create couchdb_vol
 docker volume ls
 docker container run -it -p 80:4398 -v couchdb_vol:/opt/couchdb/data couchdb_image:latest
     run a container interactive mode binded on port 80 of the machine and to a specific volume path, from image named couchdb_latest
+    the path is the path on the container. On the local machine, data is saved on a docker specific foler. (see docker volume inspect volumeName)
 
+##Bind mounts
 
+--> Bind_mounts is another way to save data in a specific local directory on the host, it won't be managed by docker.
+--mount type=bind, source=path-to-local-directory [must exist], target=path-inside-container
+
+docker run -it --name myContainerName --mount type=bind,source=c:\data,target=c:\shareddata microsoft/windowsservercore powershell
+
+ou avec -v: (à la place du named volume, on met le path complet sur le host local)
+sudo docker run -p 8888:8888 -v /home/gaetan/Documents/ai-learnings/notebooks:/home/jovyan jupyter/minimal-notebook
+--> docker run hostport:containerport -v hostdir:containerdir imagename
 
 ##Immutable infrastructure:
 
