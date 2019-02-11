@@ -20,6 +20,8 @@ K8s automates the distribution and provisioning of applications containers acros
 
     Minikube is a lightweight k8s implementation that starts a VM on your machine and deploys a simple cluster on only one node.
 
+    A node is a worker machine (either virtual or physical). Each node is managed by the master. A node can have multiple pods. The master automatically handle scheduling pods across nodes in the cluster.
+
 
 2. K8s Deployments:
 
@@ -35,7 +37,20 @@ K8s automates the distribution and provisioning of applications containers acros
     A pod is a group of one or more containers tied together for administration and networking.  A K8s deployment checks on the health of your pod and
     restarts the container if they fails. Deployments are the way to scale or manage the creation of pods.
 
-    kubctl create deployment hello-node --image=docker.io/gbelbe/nodejsk8s
-        
-    kubectl get xxx  (nodes / pods / deployments...)
+    kubctl create deployment hello-node --image=docker.io/gbelbe/nodejsk8s:1
+
+    note: si ça ne marche pas, tester la commande docker pull nom_de_limage, pour savoir si tout se passe bien
+            kubectl get xxx  (nodes / pods / deployments...)
+
+    Pods inside a kubernetes cluster are under a private isolated network. By default they are visible from other pods and services
+    within the same cluster. but not outside that network. When we use Kubectl we interact through an API endpoint with the master node.
+
+    **kubectl proxy** can create a proxy that will forward communication into the cluster private network from our terminal.
+
+A pod models an application specific "logical host" and can contain different application containers that are tightly coupled.
+> ex: nodejs app in a container, and another container with the data used by the app.
+
+
+https://kubernetes.io/docs/tutorials/kubernetes-basics/explore/explore-intro/
+
 
