@@ -12,7 +12,9 @@ K8s automates the distribution and provisioning of applications containers acros
     - A master node that coordinates the cluster: 3 process that run on a single node that can be replicated
     - Nodes = workers that run the applications
 
-    Each node has a Kubelet, agent for managing the node and communicating with the master. 
+    Each node has a 
+        - Kubelet agent for managing the node and communicating with the master, 
+        - kube proxy, a network proxy which reflects k8s networking on each node.
     Nodes also have tools for handling containers operations. (docker).
     A prod cluster should have a minimum of 3 nodes.
 
@@ -77,7 +79,48 @@ Discovery and routing among dependent Pods (such as the frontend and backend com
 Services match a set of pods using labels and selectors
 
 
+5. Ingress: 
 
-https://kubernetes.io/docs/tutorials/kubernetes-basics/expose/expose-intro/
+Exposes HTTP routes from outside the cluster to services within the cluster. Traffic routing is controlled by rules on the ingress resource.
+Use ingress to give service external URLs, to load balance traffic, 
+
+
+5. Namespaces:
+
+Kubernetes supports multiple virtual clusters backed by the same physical cluster. These virtual clusters are called namespace/
+Namespaces are a way to divide cluster resoureces between multiple users with quotas. Objects within the same namespace will have the same access control.
+
+To separate slightly different resources, you can use "labels" instead of namespace (for ex. different versions of the same software)
+
+Namespaces are used to categorize, filter and manage arbitrary group of objects within a cluster. Each object in a K8s cluster must be assigned to only one namespace.
+
+Across different namespaces, you can have the same names for objects: this can be useful for managing different environments (tests / pre / prod)
+
+Namespaces makes it easy to apply policies (quota / security...) to specific slices of your cluster. 
+Use cases:
+    1. Mapping namespaces to teams or projects (we can use role binding for security purposes)
+    2. Using namespaces to partition Life Cycle environments (dev / staging / prod) within the cluster. 
+        While it is better to separate Prod environment, it can be a useful solution for smaller projects. 
+        (network policy, role based access control, and quotas are useful for this case).
+    3. Isolate different consumers: we can separate workloads to different consumers, 
+        we can keep track of usage of the same cluster separately for     different customer (for billing purposes)
+
+In case the offer is generic, namespaces allow to develop and deploy a different instance of the same templated environment.
+The consistency can make the management much easier.
+
+
+kubectl get namespaces (default: default, kube-public, kube-system)
+
+the ability to reuse the same name is better, as objects can be rolled up to different environments while they are being tested and released.
+
+
+About namespaces: https://rancher.com/blog/2019/2019-01-28-introduction-to-kubernetes-namespaces/
+
+
+
+
+
+
+
 
 
